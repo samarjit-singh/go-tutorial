@@ -8,12 +8,26 @@ type Ninja struct {
 }
 
 func getNinja(ctx *fiber.Ctx) error {
-	wallace := Ninja {
-		Name: "Samarjit",
-		Weapon: "M416",
-	}
+	return ctx.Status(fiber.StatusOK).JSON(ninja)
+}
 
-	return ctx.Status(fiber.StatusOK).JSON(wallace)
+var ninja Ninja
+
+func createNinja(ctx *fiber.Ctx) error {
+	body := new (Ninja)
+	err := ctx.BodyParser(body)
+	
+	if err != nil {
+		ctx.Status(fiber.StatusBadRequest).SendString(err.Error())
+		return err
+	}
+	
+	ninja = Ninja {
+		Name : body.Name,
+		Weapon : body.Weapon,
+	}
+	
+	return ctx.Status(fiber.StatusOK).JSON(ninja)
 }
 
 func main() {
@@ -24,6 +38,7 @@ func main() {
 	})
 
 	app.Get("/ninja", getNinja)
+	app.Post("/ninja", createNinja)
 
 	app.Listen(":3000")
 }
