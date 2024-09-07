@@ -1,6 +1,9 @@
 package main
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+)
 
 type Ninja struct {
 	Name string
@@ -36,6 +39,9 @@ func main() {
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
+
+	app.Use(logger.New())
+	// app.Use(requestid.New())
 
 	ninjaApp := app.Group("/ninja")
 	ninjaApp.Get("", getNinja)
