@@ -37,8 +37,9 @@ func main() {
 		return c.SendString("Hello, World!")
 	})
 
-	app.Get("/ninja", getNinja)
-	app.Post("/ninja", createNinja)
+	ninjaApp := app.Group("/ninja")
+	ninjaApp.Get("", getNinja)
+	ninjaApp.Post("", createNinja)
 
 	app.Listen(":3000")
 }
